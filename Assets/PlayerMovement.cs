@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 0.0001f;
+    public float moveSpeed = 0.00000001f;
 
     public Transform orientation;
 
@@ -33,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
-        Debug.Log($"{moveDirection.ToString()}");
+        Debug.Log($"{moveDirection.normalized}");
     }
 
     private void MyInput()
@@ -44,10 +45,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
-//        transform.Translate(moveDirection.normalized * moveSpeed );
+        moveDirection = orientation.forward;
 
-        rb.velocity = moveDirection.normalized * moveSpeed;
+        transform.position = transform.position + Camera.main.transform.forward * moveSpeed * Time.deltaTime * verticalInput + Camera.main.transform.right * moveSpeed * horizontalInput * Time.deltaTime;
+
+        //transform.Translate(moveDirection.normalized * moveSpeed * Time.deltaTime);
+
+        //rb.velocity = moveDirection.normalized * moveSpeed;
     }
 }
